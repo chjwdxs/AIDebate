@@ -1,0 +1,32 @@
+{
+  "name": "ai-debate-platform",
+  "version": "1.0.0",
+  "description": "AI辩论平台是一个基于Web的应用程序，允许用户创建辩论主题，并观看两个AI模型进行正反方辩论",
+  "main": "src/backend/server.js",
+  "scripts": {
+    "start": "node src/backend/server.js",
+    "dev": "nodemon src/backend/server.js",
+    "setup": "npm install",
+    "build": "echo \"构建脚本 - 如果需要构建前端资源则在这里添加\"",
+    "start:prod": "NODE_ENV=production node src/backend/server.js"
+  },
+  "keywords": [
+    "ai",
+    "debate",
+    "platform",
+    "websocket",
+    "openai"
+  ],
+  "author": "AI Debate Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "openai": "^4.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

@@ -1,0 +1,33 @@
+# 日志文件
+logs
+*.log
+
+# 环境变量文件
+.env
+.env.local
+.env.production.local
+
+# 依赖目录
+node_modules/
+
+# 构建输出目录
+dist/
+build/
+
+# 编辑器和操作系统文件
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 数据文件
+src/backend/data/
+
+# npm相关
+package-lock.json
+yarn.lock
+
+# 可选：如果使用Docker，可以忽略这些文件
+docker-compose.override.yml

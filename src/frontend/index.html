@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI辩论平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部导航 -->
+        <header class="header">
+            <h1>🤖 AI辩论平台</h1>
+            <div class="header-controls">
+                <button id="configToggle" class="btn btn-secondary">配置</button>
+                <button id="helpButton" class="btn btn-secondary">帮助</button>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- 左侧配置面板 -->
+            <div id="configPanel" class="config-panel">
+                <h2>⚙️ 模型配置</h2>
+                <form id="configForm">
+                    <div class="config-section">
+                        <h3>正方辩手</h3>
+                        <div class="form-group">
+                            <label for="positiveModel">模型名称:</label>
+                            <input type="text" id="positiveModel" name="positiveModel" value="gpt-3.5-turbo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="positiveApiKey">API密钥:</label>
+                            <input type="password" id="positiveApiKey" name="positiveApiKey" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="positiveBaseUrl">API地址:</label>
+                            <input type="url" id="positiveBaseUrl" name="positiveBaseUrl" value="https://api.openai.com/v1" required>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3>反方辩手</h3>
+                        <div class="form-group">
+                            <label for="negativeModel">模型名称:</label>
+                            <input type="text" id="negativeModel" name="negativeModel" value="gpt-3.5-turbo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="negativeApiKey">API密钥:</label>
+                            <input type="password" id="negativeApiKey" name="negativeApiKey" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="negativeBaseUrl">API地址:</label>
+                            <input type="url" id="negativeBaseUrl" name="negativeBaseUrl" value="https://api.openai.com/v1" required>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3>裁判</h3>
+                        <div class="form-group">
+                            <label for="judgeModel">模型名称:</label>
+                            <input type="text" id="judgeModel" name="judgeModel" value="gpt-4" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="judgeApiKey">API密钥:</label>
+                            <input type="password" id="judgeApiKey" name="judgeApiKey" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="judgeBaseUrl">API地址:</label>
+                            <input type="url" id="judgeBaseUrl" name="judgeBaseUrl" value="https://api.openai.com/v1" required>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3>辩论设置</h3>
+                        <div class="form-group">
+                            <label for="maxTurns">最大轮数:</label>
+                            <input type="number" id="maxTurns" name="maxTurns" min="2" max="20" value="6" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="debateTopic">辩论主题:</label>
+                            <textarea id="debateTopic" name="debateTopic" placeholder="请输入辩论主题..." required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">保存配置</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 中央辩论区域 -->
+            <div class="debate-area">
+                <div class="topic-banner">
+                    <h2 id="currentTopic">请设置辩论主题</h2>
+                </div>
+                
+                <div id="messagesContainer" class="messages-container">
+                    <div class="messages-placeholder">
+                        <p>欢迎使用AI辩论平台！</p>
+                        <p>请在左侧配置面板设置模型参数和辩论主题，然后开始辩论。</p>
+                    </div>
+                </div>
+                
+                <!-- 参与者状态 -->
+                <div class="participants-info">
+                    <div class="participant positive">
+                        <div class="participant-avatar">👍</div>
+                        <div class="participant-details">
+                            <h4>正方</h4>
+                            <div class="participant-model" id="positiveModelInfo">未配置</div>
+                        </div>
+                    </div>
+                    
+                    <div class="participant negative">
+                        <div class="participant-avatar">👎</div>
+                        <div class="participant-details">
+                            <h4>反方</h4>
+                            <div class="participant-model" id="negativeModelInfo">未配置</div>
+                        </div>
+                    </div>
+                    
+                    <div class="participant judge">
+                        <div class="participant-avatar">⚖️</div>
+                        <div class="participant-details">
+                            <h4>裁判</h4>
+                            <div class="participant-model" id="judgeModelInfo">未配置</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧控制面板 -->
+            <div class="control-panel">
+                <div class="control-section">
+                    <h3>控制面板</h3>
+                    <div class="control-buttons">
+                        <button id="startButton" class="btn btn-primary" disabled>开始辩论</button>
+                        <button id="pauseButton" class="btn btn-warning" disabled>暂停</button>
+                        <button id="resumeButton" class="btn btn-success" disabled>继续</button>
+                        <button id="resetButton" class="btn btn-danger">重置</button>
+                    </div>
+                </div>
+                
+                <div class="status-section">
+                    <h3>辩论状态</h3>
+                    <div class="status-info">
+                        <div class="status-item">
+                            <span class="status-label">状态:</span>
+                            <span id="debateStatus" class="status-value">未开始</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">当前轮次:</span>
+                            <span id="currentTurn" class="status-value">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">发言方:</span>
+                            <span id="currentSpeaker" class="status-value">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>辩论进度</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <div id="progressText" class="progress-text">0/0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部状态栏 -->
+        <footer class="footer">
+            <div id="connectionStatus" class="status-indicator">🟡 连接中...</div>
+            <div id="systemMessage" class="system-message"></div>
+        </footer>
+    </div>
+
+    <!-- Socket.IO客户端 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
